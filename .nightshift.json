@@ -1,0 +1,6 @@
+{
+  "check": [
+    "python scripts/check.py",
+    "python -m unittest discover -s tests -v"
+  ]
+}
