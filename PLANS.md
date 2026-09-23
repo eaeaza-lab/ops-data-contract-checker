@@ -8,7 +8,7 @@
   Acceptance: `python -m unittest discover -s tests -v`
 - [x] **M2 input readers** *(mvp)* — Read CSV and JSON records deterministically and report input parsing errors.  
   Acceptance: `python -m unittest discover -s tests -v`
-- [ ] **M3 core validation** *(mvp)* — Implement schema, required-value, identifier, duplicate, total, date, and currency checks.  
+- [x] **M3 core validation** *(mvp)* — Implement schema, required-value, identifier, duplicate, total, date, and currency checks.  
   Acceptance: `python -m unittest discover -s tests -v`
 - [ ] **M4 SQLite run store** *(mvp)* — Persist run metadata and findings locally in SQLite.  
   Acceptance: `python -m unittest discover -s tests -v`
@@ -28,6 +28,7 @@
 - 2026-09-23 — M0 setup completed: initial specification, plan, project operating rules, standard-library Python skeleton, and one passing test.
 - 2026-09-24 — M1 contract model completed: `ops_contract_checker/contract.py` (parse/validate/load), two bundled synthetic contracts in `examples/contracts/`, and `tests/test_contract.py`. Could not run interpreters in the sandbox; verified by reading.
 - 2026-09-24 — M2 input readers completed: `ops_contract_checker/readers.py` (CSV/JSON readers collecting `InputProblem`s) and `tests/test_readers.py`. Could not run interpreters in the sandbox; verified by reading.
+- 2026-09-24 — M3 core validation completed: `validate_records` and `Finding` in `ops_contract_checker/validation.py` (schema, required, type, identifier, duplicate, total, date, currency) with tests in `tests/test_validation.py`. Could not run interpreters in the sandbox; verified by reading.
 
 ## Decision log
 
@@ -39,3 +40,4 @@
 - 2026-09-24 — Contract `format_version` (currently 1) is separate from the contract's own `version`; example contracts live in `examples/contracts/` and are named `<name>.v1.json`.
 - 2026-09-24 — Readers choose the parser by file extension; CSV values stay strings (typing is left to validation); JSON accepts a list of objects or `{"records": [...]}`. Parsing problems are collected in `ReadResult.problems` rather than raised, and bad rows are skipped so later rows still load.
 - 2026-09-24 — Total rules use `total_field` + `component_fields` + optional `tolerance` (default 0); date rules use ISO `min`/`max`, either optional.
+- 2026-09-24 — Blank values are reported only by the required check; type, identifier, total, date, and currency checks skip blanks, and total checks skip rows with non-numeric parts (already a type finding). A wholly missing column yields one schema finding instead of one required finding per record. Identifier patterns use `re.search` (contracts anchor with `^`/`$`). Duplicate findings point at later occurrences and name the first. Findings are ordered by check, then record position.
