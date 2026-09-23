@@ -34,6 +34,10 @@ Contracts are versioned JSON files (`format_version: 1`) declaring fields (with 
 
 `ops_contract_checker.validation.validate_records(records, contract, columns)` returns a deterministic list of `Finding`s (`check`, `message`, `row`, `field`). Checks: `schema` (missing/unexpected columns), `required`, `type`, `identifier`, `duplicate`, `total`, `date`, and `currency`. Blank values are reported only as `required`.
 
+## Run store
+
+`ops_contract_checker.store.RunStore(path)` keeps check runs in a local SQLite file (or `:memory:`). `save_run(input_path, contract_name, contract_version, record_count, findings)` returns a run id; `get_run`, `list_runs`, and `get_findings` read it back, with findings in their saved order.
+
 ## Project boundaries
 
 This repository uses synthetic data only, runs without network access, and must not contain secrets or real company, person, marketplace, or account names.
