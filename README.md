@@ -20,7 +20,7 @@ python -m unittest discover -s tests -v
 python scripts/check.py
 ```
 
-`python scripts/check.py` also produces the current synthetic placeholder report at `reports/synthetic-demo-report.html`. The validation workflow and sample data will be added during the MVP milestones in [PLANS.md](PLANS.md).
+`python scripts/check.py` also produces the synthetic demo report at `reports/synthetic-demo-report.html`. Remaining milestones are tracked in [PLANS.md](PLANS.md).
 
 ## Contracts
 
@@ -44,7 +44,11 @@ Contracts are versioned JSON files (`format_version: 1`) declaring fields (with 
 python -m ops_contract_checker check --input orders.csv --contract examples/contracts/synthetic-orders.v1.json --output out
 ```
 
-Reads the input, validates it, stores the run in `out/runs.sqlite` (override with `--db`), writes `out/findings.json`, and prints the findings. Exit codes: `0` no findings, `1` findings reported, `2` unreadable contract, input, or output. The HTML report arrives in a later milestone.
+Reads the input, validates it, stores the run in `out/runs.sqlite` (override with `--db`), writes `out/report.html` and `out/findings.json`, and prints the findings. Exit codes: `0` no findings, `1` findings reported, `2` unreadable contract, input, or output.
+
+## HTML report
+
+`ops_contract_checker.report.render_report(...)` builds a single self-contained HTML page (inline CSS, no scripts or network references, deterministic output) with a pass/fail summary, per-check counts, and a table of findings. Open `report.html` directly from disk. `python scripts/run_demo.py` checks `examples/data/synthetic-orders.csv` (which has deliberate defects) and copies the report to `reports/synthetic-demo-report.html`.
 
 ## Project boundaries
 

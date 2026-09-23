@@ -10,6 +10,7 @@ from pathlib import Path
 from . import __version__
 from .contract import ContractError, load_contract
 from .readers import read_records
+from .report import render_report
 from .store import RunStore
 from .validation import validate_records
 
@@ -18,6 +19,7 @@ EXIT_FINDINGS = 1
 EXIT_ERROR = 2
 
 FINDINGS_FILE = "findings.json"
+REPORT_FILE = "report.html"
 DEFAULT_DB_NAME = "runs.sqlite"
 
 
@@ -35,7 +37,7 @@ def build_parser() -> argparse.ArgumentParser:
         "check",
         help="check a CSV or JSON export against a contract",
         description="Check a CSV or JSON export against a versioned JSON contract, "
-        f"store the run in SQLite, and write {FINDINGS_FILE} to the output directory.",
+        f"store the run in SQLite, and write {REPORT_FILE} and {FINDINGS_FILE} to the output directory.",
     )
     check.add_argument("--input", required=True, help="path to the .csv or .json export")
     check.add_argument("--contract", required=True, help="path to the JSON contract")
@@ -93,6 +95,17 @@ def run_check(args: argparse.Namespace) -> int:
         (output / FINDINGS_FILE).write_text(
             json.dumps(payload, indent=2) + "\n", encoding="utf-8"
         )
+        (output / REPORT_FILE).write_text(
+            render_report(
+                input_path=str(args.input),
+                contract_name=contract.name,
+                contract_version=contract.version,
+                record_count=len(result.records),
+                findings=findings,
+                run_id=run_id,
+            ),
+            encoding="utf-8",
+        )
     except OSError as exc:
         print(f"error: cannot write output: {exc}", file=sys.stderr)
         return EXIT_ERROR
@@ -104,6 +117,7 @@ def run_check(args: argparse.Namespace) -> int:
     for finding in findings:
         print(f"  {finding}")
     print(f"Run {run_id} stored in {db_path}; findings written to {output / FINDINGS_FILE}")
+    print(f"HTML report written to {output / REPORT_FILE}")
     return EXIT_FINDINGS if findings else EXIT_OK
 
 

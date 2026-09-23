@@ -14,7 +14,7 @@
   Acceptance: `python -m unittest discover -s tests -v`
 - [x] **M5 CLI workflow** *(mvp)* — Wire input, contract, output, and SQLite options into a useful offline CLI.  
   Acceptance: `python -m ops_contract_checker --help`
-- [ ] **M6 HTML report** *(mvp)* — Generate a self-contained HTML report for a completed check.  
+- [x] **M6 HTML report** *(mvp)* — Generate a self-contained HTML report for a completed check.  
   Acceptance: `python scripts/run_demo.py`
 - [ ] **M7 demo and regression checks** *(mvp)* — Complete the synthetic demo and report verification script.  
   Acceptance: `python scripts/verify_demo_report.py`
@@ -31,6 +31,7 @@
 - 2026-09-24 — M3 core validation completed: `validate_records` and `Finding` in `ops_contract_checker/validation.py` (schema, required, type, identifier, duplicate, total, date, currency) with tests in `tests/test_validation.py`. Could not run interpreters in the sandbox; verified by reading.
 - 2026-09-24 — M4 SQLite run store completed: `ops_contract_checker/store.py` (`RunStore`, `RunInfo`) and `tests/test_store.py`. Could not run interpreters in the sandbox; verified by reading.
 - 2026-09-24 — M5 CLI workflow completed: `ops_contract_checker/cli.py` with a `check` subcommand (`--input`, `--contract`, `--output`, optional `--db`), `__main__.py` delegating to it, and `tests/test_cli.py`. Could not run interpreters in the sandbox; verified by reading.
+- 2026-09-24 — M6 HTML report completed: `ops_contract_checker/report.py` (`render_report`), CLI now writes `report.html`, bundled demo data `examples/data/synthetic-orders.csv`, `scripts/run_demo.py` runs the real checker, `scripts/verify_demo_report.py` checks the real report, and `tests/test_report.py`. Could not run interpreters in the sandbox; verified by reading.
 
 ## Decision log
 
@@ -45,3 +46,4 @@
 - 2026-09-24 — Blank values are reported only by the required check; type, identifier, total, date, and currency checks skip blanks, and total checks skip rows with non-numeric parts (already a type finding). A wholly missing column yields one schema finding instead of one required finding per record. Identifier patterns use `re.search` (contracts anchor with `^`/`$`). Duplicate findings point at later occurrences and name the first. Findings are ordered by check, then record position.
 - 2026-09-24 — Run store uses two tables (`runs`, `findings`) with an explicit `position` column so findings read back in the order they were saved; the timestamp is injectable (`created_at`) for deterministic tests, and the store never opens the network or writes anything but the given database path.
 - 2026-09-24 — CLI is a `check` subcommand; exit codes are 0 (no findings), 1 (findings), 2 (bad contract/input/output). Input or contract problems abort before anything is stored. Until the M6 HTML report exists, the CLI writes `findings.json` to the output directory; the SQLite file defaults to `<output>/runs.sqlite`. Running with no command prints help and exits 0.
+- 2026-09-24 — The HTML report is one inline-CSS page with no scripts or timestamps, so output is deterministic and opens from disk; all text is HTML-escaped. The CLI writes `report.html` alongside `findings.json` (kept for machine use). `run_demo.py` runs the CLI into `reports/demo-run` (cleaned each time so run history is stable) and copies the report to `reports/synthetic-demo-report.html`; exit code 1 (findings) is expected for the demo data, only 2 fails it. `verify_demo_report.py` now checks the real report title and contract name; fuller demo assertions remain M7.

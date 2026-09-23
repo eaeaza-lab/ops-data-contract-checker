@@ -1,0 +1,9 @@
+record_id,order_date,net_amount,tax_amount,total_amount,currency,note
+SYN-001,2026-03-01,10.00,2.00,12.00,TST,clean record
+SYN-002,2026-03-02,20.00,4.00,24.00,XTS,clean record
+SYN-002,2026-03-03,20.00,4.00,24.00,XTS,repeated identifier
+SYN-003,2026-03-04,15.00,3.00,99.00,TST,broken total
+SYN-004,2027-02-01,8.00,1.60,9.60,TST,date outside range
+SYN-005,2026-04-10,30.00,6.00,36.00,ZZZ,unsupported currency
+BAD-6,2026-05-01,5.00,1.00,6.00,TST,malformed identifier
+SYN-007,2026-05-02,12.00,2.40,,TST,missing total

@@ -47,6 +47,8 @@ class CliTests(unittest.TestCase):
         payload = json.loads((self.tmp / "out" / "findings.json").read_text(encoding="utf-8"))
         self.assertEqual(payload["finding_count"], 0)
         self.assertEqual(payload["record_count"], 1)
+        report = (self.tmp / "out" / "report.html").read_text(encoding="utf-8")
+        self.assertIn("Data Contract Report", report)
         with RunStore(str(self.tmp / "out" / "runs.sqlite")) as store:
             self.assertEqual(len(store.list_runs()), 1)
 
