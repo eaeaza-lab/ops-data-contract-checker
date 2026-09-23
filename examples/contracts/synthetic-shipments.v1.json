@@ -1,0 +1,28 @@
+{
+  "format_version": 1,
+  "name": "synthetic-shipments",
+  "version": "1.0.0",
+  "description": "Synthetic shipment export with a line-item total check.",
+  "fields": [
+    {"name": "shipment_id", "type": "string", "required": true},
+    {"name": "ship_date", "type": "date", "required": true},
+    {"name": "quantity", "type": "integer", "required": true},
+    {"name": "handling_fee", "type": "number"},
+    {"name": "freight_fee", "type": "number"},
+    {"name": "fee_total", "type": "number"},
+    {"name": "currency", "type": "string", "required": true}
+  ],
+  "identifiers": [
+    {"field": "shipment_id", "pattern": "^SHP-[0-9]{4}$"}
+  ],
+  "duplicate_keys": ["shipment_id"],
+  "totals": [
+    {"total_field": "fee_total", "component_fields": ["handling_fee", "freight_fee"]}
+  ],
+  "date_rules": [
+    {"field": "ship_date", "min": "2026-01-01"}
+  ],
+  "currency_rules": [
+    {"field": "currency", "allowed": ["TST"]}
+  ]
+}

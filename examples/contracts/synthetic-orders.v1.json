@@ -1,0 +1,28 @@
+{
+  "format_version": 1,
+  "name": "synthetic-orders",
+  "version": "1.0.0",
+  "description": "Synthetic order export used for demos and tests.",
+  "fields": [
+    {"name": "record_id", "type": "string", "required": true},
+    {"name": "order_date", "type": "date", "required": true},
+    {"name": "net_amount", "type": "number", "required": true},
+    {"name": "tax_amount", "type": "number", "required": true},
+    {"name": "total_amount", "type": "number", "required": true},
+    {"name": "currency", "type": "string", "required": true},
+    {"name": "note", "type": "string"}
+  ],
+  "identifiers": [
+    {"field": "record_id", "pattern": "^SYN-[0-9]{3,}$"}
+  ],
+  "duplicate_keys": ["record_id"],
+  "totals": [
+    {"total_field": "total_amount", "component_fields": ["net_amount", "tax_amount"], "tolerance": 0.01}
+  ],
+  "date_rules": [
+    {"field": "order_date", "min": "2026-01-01", "max": "2026-12-31"}
+  ],
+  "currency_rules": [
+    {"field": "currency", "allowed": ["TST", "XTS"]}
+  ]
+}

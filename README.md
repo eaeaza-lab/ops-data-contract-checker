@@ -22,6 +22,10 @@ python scripts/check.py
 
 `python scripts/check.py` also produces the current synthetic placeholder report at `reports/synthetic-demo-report.html`. The validation workflow and sample data will be added during the MVP milestones in [PLANS.md](PLANS.md).
 
+## Contracts
+
+Contracts are versioned JSON files (`format_version: 1`) declaring fields (with type and required flag), identifier patterns, duplicate keys, total rules, date ranges, and allowed currencies. Load and validate them with `ops_contract_checker.contract.load_contract`; invalid contracts raise `ContractError` listing every problem. Synthetic examples are in `examples/contracts/`.
+
 ## Project boundaries
 
 This repository uses synthetic data only, runs without network access, and must not contain secrets or real company, person, marketplace, or account names.

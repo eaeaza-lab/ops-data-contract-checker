@@ -4,7 +4,7 @@
 
 - [x] **M0 setup** *(mvp)* — Establish the specification, project rules, offline check runner, and a tested Python package skeleton.  
   Acceptance: `python scripts/check.py`
-- [ ] **M1 contract model** *(mvp)* — Define and validate the versioned JSON contract format, with bundled synthetic examples.  
+- [x] **M1 contract model** *(mvp)* — Define and validate the versioned JSON contract format, with bundled synthetic examples.  
   Acceptance: `python -m unittest discover -s tests -v`
 - [ ] **M2 input readers** *(mvp)* — Read CSV and JSON records deterministically and report input parsing errors.  
   Acceptance: `python -m unittest discover -s tests -v`
@@ -26,6 +26,7 @@
 ## Progress log
 
 - 2026-09-23 — M0 setup completed: initial specification, plan, project operating rules, standard-library Python skeleton, and one passing test.
+- 2026-09-24 — M1 contract model completed: `ops_contract_checker/contract.py` (parse/validate/load), two bundled synthetic contracts in `examples/contracts/`, and `tests/test_contract.py`. Could not run interpreters in the sandbox; verified by reading.
 
 ## Decision log
 
@@ -33,3 +34,6 @@
 - 2026-09-23 — Use `unittest` rather than a third-party test runner so tests run without package installation.
 - 2026-09-23 — Keep report serving optional; generated reports must open directly from disk.
 - 2026-09-23 — Keep all examples explicitly synthetic.
+- 2026-09-24 — Contracts are strict: unknown keys and undeclared field references are errors, and all problems are collected and reported together rather than failing on the first one.
+- 2026-09-24 — Contract `format_version` (currently 1) is separate from the contract's own `version`; example contracts live in `examples/contracts/` and are named `<name>.v1.json`.
+- 2026-09-24 — Total rules use `total_field` + `component_fields` + optional `tolerance` (default 0); date rules use ISO `min`/`max`, either optional.
