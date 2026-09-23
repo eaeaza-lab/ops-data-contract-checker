@@ -26,6 +26,10 @@ python scripts/check.py
 
 Contracts are versioned JSON files (`format_version: 1`) declaring fields (with type and required flag), identifier patterns, duplicate keys, total rules, date ranges, and allowed currencies. Load and validate them with `ops_contract_checker.contract.load_contract`; invalid contracts raise `ContractError` listing every problem. Synthetic examples are in `examples/contracts/`.
 
+## Input readers
+
+`ops_contract_checker.readers.read_records(path)` reads a `.csv` or `.json` file (UTF-8) and returns a `ReadResult` with `records`, `columns`, and `problems`. CSV values stay strings; JSON may be a list of objects or `{"records": [...]}`. Parsing errors (empty input, bad header, wrong column count, invalid JSON, non-object records, missing file) are collected as `InputProblem`s instead of raised.
+
 ## Project boundaries
 
 This repository uses synthetic data only, runs without network access, and must not contain secrets or real company, person, marketplace, or account names.
