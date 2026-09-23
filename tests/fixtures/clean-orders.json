@@ -1,0 +1,7 @@
+{
+  "records": [
+    {"record_id": "SYN-001", "order_date": "2026-01-01", "net_amount": 10.0, "tax_amount": 2.0, "total_amount": 12.0, "currency": "TST", "note": "first day of range"},
+    {"record_id": "SYN-002", "order_date": "2026-12-31", "net_amount": 10, "tax_amount": 2, "total_amount": 12.01, "currency": "XTS", "note": "last day and tolerance edge"},
+    {"record_id": "SYN-1000", "order_date": "2026-06-15", "net_amount": 0, "tax_amount": 0, "total_amount": 0, "currency": "TST", "note": ""}
+  ]
+}

@@ -1,0 +1,11 @@
+record_id,order_date,net_amount,tax_amount,total_amount,currency,note
+SYN-001,2026-01-01,10.00,2.00,12.00,TST,clean
+SYN-002,2026-12-31,10,2,12.01,XTS,clean at tolerance edge
+SYN-003,2025-12-31,1,1,2,TST,one day before range
+SYN-004,2027-01-01,1,1,2,TST,one day after range
+SYN-005,2026-06-01,1,1,2.02,TST,just over tolerance
+SYN-006,2026-06-01,1,1,2,tst,currency is case sensitive
+syn-007,2026-06-01,1,1,2,TST,identifier is case sensitive
+SYN-08,2026-06-01,1,1,2,TST,too few digits
+   ,2026-06-01,1,1,2,TST,whitespace-only identifier
+SYN-002,2026-06-01,1,1,2,TST,repeats record 2

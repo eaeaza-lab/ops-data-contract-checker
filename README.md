@@ -1,6 +1,6 @@
 # Offline Operations Data Contract Checker
 
-Status: **work in progress**
+Status: **release candidate** (all milestones complete)
 
 A local, offline CLI for checking synthetic CSV and JSON exports against versioned business data contracts. It is intended to flag schema drift, duplicate records, invalid identifiers, broken totals, and suspicious date or currency changes, then produce a clear HTML quality report.
 
@@ -59,6 +59,14 @@ Reads the input, validates it, stores the run in `out/runs.sqlite` (override wit
 `ops_contract_checker.report.render_report(...)` builds a single self-contained HTML page (inline CSS, no scripts or network references, deterministic output) with a pass/fail summary, per-check counts, and a table of findings, followed by a short legend explaining each check. Open `report.html` directly from disk. `python scripts/run_demo.py` checks `examples/data/synthetic-orders.csv` (which has deliberate defects) and copies the report to `reports/synthetic-demo-report.html`.
 
 `python scripts/verify_demo_report.py` re-checks the demo report: FAIL status, 8 records, exactly one finding for each of the required, identifier, duplicate, total, date, and currency checks, and no scripts or URLs. Update its `EXPECTED_COUNTS` if the demo data or contract changes.
+
+## Release readiness
+
+`tests/fixtures/` holds deterministic synthetic inputs (clean CSV and JSON, plus `edge-orders.csv` exercising range, tolerance, case-sensitivity, and blank-identifier boundaries), covered by `tests/test_release.py`. [RELEASE.md](RELEASE.md) is the local pre-release checklist.
+
+## Demo
+
+`python scripts/run_demo.py` prints the findings for the bundled defective synthetic orders and writes `reports/synthetic-demo-report.html`. Expected summary: status FAIL, 8 records checked, one finding each for `required`, `identifier`, `duplicate`, `total`, `date`, and `currency`.
 
 ## Project boundaries
 

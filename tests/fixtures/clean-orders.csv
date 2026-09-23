@@ -1,0 +1,4 @@
+record_id,order_date,net_amount,tax_amount,total_amount,currency,note
+SYN-001,2026-01-01,10.00,2.00,12.00,TST,first day of range
+SYN-002,2026-12-31,10,2,12.01,XTS,last day and tolerance edge
+SYN-1000,2026-06-15,0,0,0,TST,

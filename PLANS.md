@@ -20,7 +20,7 @@
   Acceptance: `python scripts/verify_demo_report.py`
 - [x] **M8 usability polish** *(polish)* — Improve error messages, report readability, and CLI examples.  
   Acceptance: `python scripts/check.py`
-- [ ] **M9 release readiness** *(polish)* — Add deterministic fixtures, edge-case coverage, and a local release checklist.  
+- [x] **M9 release readiness** *(polish)* — Add deterministic fixtures, edge-case coverage, and a local release checklist.  
   Acceptance: `python scripts/check.py`
 
 ## Progress log
@@ -34,6 +34,7 @@
 - 2026-09-24 — M6 HTML report completed: `ops_contract_checker/report.py` (`render_report`), CLI now writes `report.html`, bundled demo data `examples/data/synthetic-orders.csv`, `scripts/run_demo.py` runs the real checker, `scripts/verify_demo_report.py` checks the real report, and `tests/test_report.py`. Could not run interpreters in the sandbox; verified by reading.
 - 2026-09-24 — M7 demo and regression checks completed: `scripts/verify_demo_report.py` now asserts the FAIL status, record count, exact per-check finding counts, self-containment, and `findings.json` total; added `tests/test_demo_verify.py`. Could not run interpreters in the sandbox; verified by reading.
 - 2026-09-24 — M8 usability polish completed: CLI `--help` now shows usage examples, contract/input/output errors carry a `hint:` line, the HTML report marks fields as code, stripes rows, and adds a "What the checks mean" legend; tests added in `tests/test_cli.py` and `tests/test_report.py`. Could not run interpreters in the sandbox; verified by reading.
+- 2026-09-24 — M9 release readiness completed: deterministic fixtures in `tests/fixtures/` (clean CSV/JSON and a boundary-case CSV), edge-case and fixture tests in `tests/test_release.py`, and a local release checklist in `RELEASE.md`. Could not run interpreters in the sandbox; verified by reading.
 
 ## Decision log
 
@@ -51,3 +52,4 @@
 - 2026-09-24 — The HTML report is one inline-CSS page with no scripts or timestamps, so output is deterministic and opens from disk; all text is HTML-escaped. The CLI writes `report.html` alongside `findings.json` (kept for machine use). `run_demo.py` runs the CLI into `reports/demo-run` (cleaned each time so run history is stable) and copies the report to `reports/synthetic-demo-report.html`; exit code 1 (findings) is expected for the demo data, only 2 fails it. `verify_demo_report.py` now checks the real report title and contract name; fuller demo assertions remain M7.
 - 2026-09-24 — Demo verification hard-codes the expected per-check counts (one defect each for required, identifier, duplicate, total, date, currency) by parsing the report's summary rows; `verify()` takes paths so tests can exercise it on temporary reports. Changing the demo CSV or contract requires updating `EXPECTED_COUNTS`.
 - 2026-09-24 — M8 keeps the report's summary rows in the exact `<tr><td>check</td><td>n</td></tr>` shape because `verify_demo_report.py` parses them; the check legend uses a `<dl>` so it cannot be mistaken for summary rows. Error hints are added as extra stderr lines so existing message text (e.g. "not found", "invalid contract") is unchanged.
+- 2026-09-24 — M9 fixtures live under `tests/fixtures/` (not `examples/`) because they exist to pin edge behavior: date range and total tolerance boundaries are inclusive, identifier and currency matching are case-sensitive, and a whitespace-only identifier counts as blank (required only, no identifier/duplicate finding). The edge test asserts the exact ordered findings, so changing check ordering requires updating it.
