@@ -50,6 +50,8 @@ Reads the input, validates it, stores the run in `out/runs.sqlite` (override wit
 
 `ops_contract_checker.report.render_report(...)` builds a single self-contained HTML page (inline CSS, no scripts or network references, deterministic output) with a pass/fail summary, per-check counts, and a table of findings. Open `report.html` directly from disk. `python scripts/run_demo.py` checks `examples/data/synthetic-orders.csv` (which has deliberate defects) and copies the report to `reports/synthetic-demo-report.html`.
 
+`python scripts/verify_demo_report.py` re-checks the demo report: FAIL status, 8 records, exactly one finding for each of the required, identifier, duplicate, total, date, and currency checks, and no scripts or URLs. Update its `EXPECTED_COUNTS` if the demo data or contract changes.
+
 ## Project boundaries
 
 This repository uses synthetic data only, runs without network access, and must not contain secrets or real company, person, marketplace, or account names.
