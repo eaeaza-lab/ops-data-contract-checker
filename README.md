@@ -38,6 +38,14 @@ Contracts are versioned JSON files (`format_version: 1`) declaring fields (with 
 
 `ops_contract_checker.store.RunStore(path)` keeps check runs in a local SQLite file (or `:memory:`). `save_run(input_path, contract_name, contract_version, record_count, findings)` returns a run id; `get_run`, `list_runs`, and `get_findings` read it back, with findings in their saved order.
 
+## CLI
+
+```text
+python -m ops_contract_checker check --input orders.csv --contract examples/contracts/synthetic-orders.v1.json --output out
+```
+
+Reads the input, validates it, stores the run in `out/runs.sqlite` (override with `--db`), writes `out/findings.json`, and prints the findings. Exit codes: `0` no findings, `1` findings reported, `2` unreadable contract, input, or output. The HTML report arrives in a later milestone.
+
 ## Project boundaries
 
 This repository uses synthetic data only, runs without network access, and must not contain secrets or real company, person, marketplace, or account names.
