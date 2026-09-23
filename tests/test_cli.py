@@ -78,6 +78,16 @@ class CliTests(unittest.TestCase):
         self.assertEqual(code, EXIT_ERROR)
         self.assertIn("invalid contract", err)
 
+    def test_input_error_includes_hint(self):
+        _, _, err = self.check(self.tmp / "nope.csv")
+        self.assertIn("hint:", err)
+
+    def test_help_shows_examples(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), self.assertRaises(SystemExit):
+            main(["--help"])
+        self.assertIn("examples:", out.getvalue())
+
     def test_no_command_prints_help(self):
         code, out, _ = run_cli()
         self.assertEqual(code, EXIT_OK)

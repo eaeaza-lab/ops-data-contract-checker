@@ -17,7 +17,22 @@ h1 { margin-bottom: 0.25rem; }
 table { border-collapse: collapse; margin: 1rem 0; }
 th, td { border: 1px solid #d0d7de; padding: 0.35rem 0.75rem; text-align: left; }
 th { background: #f6f8fa; }
+tr:nth-child(even) td { background: #fafbfc; }
+code { font-family: monospace; background: #f6f8fa; padding: 0 0.25rem; }
+dt { font-weight: bold; margin-top: 0.5rem; }
+dd { margin-left: 1.5rem; color: #57606a; }
 """
+
+CHECK_HELP = {
+    "schema": "Columns or fields differ from the contract (missing or unexpected).",
+    "required": "A required field is blank or absent in a record.",
+    "type": "A value does not match the declared field type.",
+    "identifier": "An identifier does not match the contract's pattern.",
+    "duplicate": "A record repeats the key of an earlier record.",
+    "total": "A total does not equal the sum of its components within tolerance.",
+    "date": "A date falls outside the contract's allowed range.",
+    "currency": "A currency code is not in the contract's allowed list.",
+}
 
 
 def render_report(
@@ -45,7 +60,7 @@ def render_report(
             "<tr>"
             f"<td>{escape(f.check)}</td>"
             f"<td>{'file' if f.row is None else f.row}</td>"
-            f"<td>{escape(f.field or '')}</td>"
+            f"<td>{f'<code>{escape(f.field)}</code>' if f.field else ''}</td>"
             f"<td>{escape(f.message)}</td>"
             "</tr>"
             for f in findings
@@ -56,6 +71,11 @@ def render_report(
         )
     else:
         details = "<p>No findings.</p>"
+
+    legend = "\n".join(
+        f"<dt>{escape(check)}</dt><dd>{escape(CHECK_HELP.get(check, ''))}</dd>"
+        for check in CHECKS
+    )
 
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
@@ -73,5 +93,9 @@ Input: {escape(input_path)}</p>
 </table>
 <h2>Findings</h2>
 {details}
+<h2>What the checks mean</h2>
+<dl>
+{legend}
+</dl>
 </body></html>
 """

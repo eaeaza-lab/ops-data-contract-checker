@@ -30,6 +30,11 @@ class ReportTests(unittest.TestCase):
         self.assertNotIn("<b>sum</b>", html)
         self.assertIn("<td>file</td>", html)
 
+    def test_report_explains_checks_and_marks_fields(self):
+        html = render([Finding("total", "bad sum", 2, "total_amount")])
+        self.assertIn("What the checks mean", html)
+        self.assertIn("<code>total_amount</code>", html)
+
     def test_is_self_contained_and_deterministic(self):
         html = render([Finding("date", "out of range", 1, "order_date")])
         self.assertEqual(html, render([Finding("date", "out of range", 1, "order_date")]))

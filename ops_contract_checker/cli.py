@@ -22,12 +22,19 @@ FINDINGS_FILE = "findings.json"
 REPORT_FILE = "report.html"
 DEFAULT_DB_NAME = "runs.sqlite"
 
+EPILOG = """examples:
+  ops-contract-checker check --input orders.csv --contract examples/contracts/synthetic-orders.v1.json --output out
+  ops-contract-checker check --input orders.json --contract my-contract.json --output out --db history.sqlite
+
+exit codes: 0 no findings, 1 findings reported, 2 usage or input error"""
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ops-contract-checker",
         description="Validate synthetic CSV and JSON exports against versioned data contracts.",
-        epilog="exit codes: 0 no findings, 1 findings reported, 2 usage or input error",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=EPILOG,
     )
     parser.add_argument(
         "--version", action="version", version=f"ops-contract-checker {__version__}"
@@ -56,7 +63,12 @@ def run_check(args: argparse.Namespace) -> int:
         print(f"error: invalid contract {args.contract}:\n{exc}", file=sys.stderr)
         return EXIT_ERROR
     except OSError as exc:
-        print(f"error: cannot read contract: {exc}", file=sys.stderr)
+        print(
+            f"error: cannot read contract {args.contract}: {exc}\n"
+            "hint: pass the path of a versioned JSON contract, e.g. "
+            "examples/contracts/synthetic-orders.v1.json",
+            file=sys.stderr,
+        )
         return EXIT_ERROR
 
     result = read_records(args.input)
@@ -64,6 +76,7 @@ def run_check(args: argparse.Namespace) -> int:
         print(f"error: cannot read input {args.input}:", file=sys.stderr)
         for problem in result.problems:
             print(f"  {problem}", file=sys.stderr)
+        print("hint: inputs must be UTF-8 .csv or .json files", file=sys.stderr)
         return EXIT_ERROR
 
     findings = validate_records(result.records, contract, result.columns)
@@ -107,7 +120,11 @@ def run_check(args: argparse.Namespace) -> int:
             encoding="utf-8",
         )
     except OSError as exc:
-        print(f"error: cannot write output: {exc}", file=sys.stderr)
+        print(
+            f"error: cannot write output under {output}: {exc}\n"
+            "hint: check that the output directory and --db path are writable",
+            file=sys.stderr,
+        )
         return EXIT_ERROR
 
     print(
