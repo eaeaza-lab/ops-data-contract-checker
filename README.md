@@ -1,6 +1,6 @@
 # Offline Operations Data Contract Checker
 
-Status: **release candidate** (all milestones complete)
+**Status:** release candidate — feature-complete on synthetic data, under final review.
 
 A local, offline CLI for checking synthetic CSV and JSON exports against versioned business data contracts. It is intended to flag schema drift, duplicate records, invalid identifiers, broken totals, and suspicious date or currency changes, then produce a clear HTML quality report.
 
@@ -71,3 +71,7 @@ Reads the input, validates it, stores the run in `out/runs.sqlite` (override wit
 ## Project boundaries
 
 This repository uses synthetic data only, runs without network access, and must not contain secrets or real company, person, marketplace, or account names.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
